@@ -144,7 +144,10 @@ local function fire_event(node_name, value)
     fields[node_name] = value
 
     for _, func in ipairs(on_receive_fields) do
-        func(player, current_formname, fields)
+        local ok, err = pcall(func, player, current_formname, fields)
+        if not ok then
+            minetest.chat_send_all(err)
+        end
     end
 end
 
