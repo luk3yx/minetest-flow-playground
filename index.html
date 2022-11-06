@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <title>Flow playground</title>
+    <link rel="stylesheet" type="text/css" href="https://luk3yx.gitlab.io/minetest-formspec-editor/style.css" />
+
+    <script src="https://unpkg.com/fengari-web@0.1.4/dist/fengari-web.js"></script>
+    <script type="application/lua" src="index.lua" async defer></script>
+
+    <script src="https://unpkg.com/monaco-editor@0.34.1/min/vs/loader.js" defer></script>
+    <script>
+        "use strict";
+        window.addEventListener("load", () => {
+            var editor;
+            require.config({
+                paths: {vs: "https://unpkg.com/monaco-editor@0.34.1/min/vs"}
+            });
+            require(["vs/editor/editor.main"], () => {
+                const container = document.getElementById("code-container");
+                const code = container.textContent.trim();
+                container.innerHTML = "";
+                editor = monaco.editor.create(container, {
+                    value: code,
+                    language: 'lua',
+                    theme: 'vs-dark',
+                    automaticLayout: true,
+                    scrollBeyondLastLine: false,
+                    wordWrap: true
+                });
+                run_playground_code(code);
+
+                document.body.removeChild(document.getElementById("loader"));
+            });
+
+            document.getElementById("run").addEventListener("click", () => {
+                if (!window.run_playground_code) {
+                    alert("Error loading Lua script!");
+                    return;
+                }
+
+                run_playground_code(editor.getValue());
+            });
+        });
+
+        window.addEventListener("beforeunload", e => {
+            return (e || window.event).returnValue = "Warning: You will lose your code!";
+        });
+    </script>
+
+    <style>
+    html, body, #main {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    .hbox {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .vbox {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /*#formspec_output {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }*/
+    #code-container, #formspec {
+        box-sizing: border-box;
+        width: 100%;
+        height: 100%;
+    }
+
+    #formspec {
+        height: 15vh;
+        resize: none;
+    }
+
+    #loader, #output {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #8CBAFA;
+    }
+
+    #loader, #output.fs-open {
+        background-color: #2B516E;
+    }
+
+    #chat {
+        white-space: pre-wrap;
+        font-family: Arimo, sans-serif;
+        color: #FFFFFF;
+        text-shadow: 1px 1px black;
+    }
+
+    #loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        font-size: 10em;
+        color: white;
+    }
+
+    #run {
+        font-family: Arimo;
+        font-size: 2em;
+        padding: 0.25em;
+        color: white;
+        width: 100%;
+        text-shadow: 1px 1px black;
+    }
+    </style>
+</head>
+<body>
+    <div id="loader">Loading...</div>
+
+    <div id="main" class="hbox">
+        <div class="vbox" style="width: 50vw;">
+            <div id="code-container">
+-- Welcome to the flow playground!
+-- This webpage provides a limited Lua environment to create flow UIs with.
+-- To run the below code, click the "run" button at the bottom of the page.
+-- You can interact with the UI on the right-hand side of the screen.
+local gui = flow.widgets
+
+local my_gui = flow.make_gui(function(player, ctx)
+    return gui.VBox{
+        gui.HBox{
+            gui.Image{texture_name = "default_mese_crystal.png", w = 1, h = 1},
+            gui.Label{label = "Hello world!"},
+        },
+        gui.Label{label = "Here is a dropdown:"},
+        gui.Dropdown{
+            name = "my_dropdown",
+            items = {'First item', 'Second item', 'Third item'},
+            index_event = true,
+        },
+        gui.Label{label = ("Selected: %d"):format(ctx.form.my_dropdown or 1)},
+        gui.HBox{
+            gui.Button{
+                label = "Print index", w = 3,
+                on_event = function(player, ctx)
+                    print(("Selected index: %d"):format(ctx.form.my_dropdown))
+                end,
+            },
+            gui.ButtonExit{label = "Close form", w = 3},
+        }
+    }
+end)
+
+my_gui:show(minetest.get_player_by_name("playground"))
+            </div>
+            <div class="formspec_ast-base" style="display: flex; background: #111;">
+                <button id="run" class="formspec_ast-button formspec_ast-clickable">Run</button>
+            </div>
+        </div>
+        <div class="vbox" style="width: 50vw;">
+            <div id="chat" style="position: absolute;"></div>
+            <div id="output" style="flex-grow: 1;"></div>
+            <!-- <textarea id="formspec"></textarea> -->
+        </div>
+    </div>
+</body>
+</html>

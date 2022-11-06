@@ -1,0 +1,19 @@
+image: roangzero1/factorio-mod:luarocks5.3-alpine
+
+luacheck:
+    stage: test
+    script:
+        - luacheck .
+
+pages:
+    stage: deploy
+    script:
+        - git submodule update --recursive --init
+        - mkdir public public/flow
+        - cp *.lua *.html public
+        - cp flow/*.lua public/flow
+    artifacts:
+        paths:
+            - public
+    only:
+        - main
