@@ -217,7 +217,9 @@ local function reset_environment()
         table = table.copy(table),
         minetest = table.copy(minetest),
         flow = flow_copy,
-        player = minetest.get_player_by_name(PLAYER_NAME)
+        player = minetest.get_player_by_name(PLAYER_NAME),
+        pairs = pairs,
+        ipairs = ipairs,
     }
 end
 
