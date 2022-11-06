@@ -73,6 +73,15 @@ function minetest.get_connected_players()
     return {minetest.get_player_by_name(PLAYER_NAME)}
 end
 
+-- TODO
+function minetest.get_color_escape_sequence()
+    return ""
+end
+
+function minetest.colorize(_, text)
+    return text
+end
+
 local chat
 local chat_div = document:getElementById("chat")
 function minetest.chat_send_all(msg)
@@ -197,6 +206,14 @@ minetest.get_current_modname = noop
 
 local on_receive_fields_bkp = table.copy(on_receive_fields)
 
+local function print_to_chat(...)
+    local t = {}
+    for i = 1, select("#", ...) do
+        t[i] = tostring(select(i, ...))
+    end
+    minetest.chat_send_all(table.concat(t, "\t"))
+end
+
 -- Makes a new Lua environment
 local function reset_environment()
     chat = {}
@@ -209,20 +226,28 @@ local function reset_environment()
         flow_copy[k] = v
     end
     return {
-        print = function(...)
-            local t = {}
-            for i = 1, select("#", ...) do
-                t[i] = tostring(select(i, ...))
-            end
-            minetest.chat_send_all(table.concat(t, "\t"))
-        end,
+        _VERSION = _VERSION,
+        assert = assert,
+        error = error,
+        flow = flow_copy,
+        ipairs = ipairs,
+        math = table.copy(math),
+        minetest = table.copy(minetest),
+        next = next,
+        os = {clock = os.clock, date = os.date, difftime = os.difftime,
+            time = os.time},
+        pairs = pairs,
+        pcall = pcall,
+        player = minetest.get_player_by_name(PLAYER_NAME),
+        print = print_to_chat,
+        select = select,
         string = table.copy(string),
         table = table.copy(table),
-        minetest = table.copy(minetest),
-        flow = flow_copy,
-        player = minetest.get_player_by_name(PLAYER_NAME),
-        pairs = pairs,
-        ipairs = ipairs,
+        tonumber = tonumber,
+        tostring = tostring,
+        type = type,
+        unpack = table.unpack or unpack,
+        xpcall = xpcall,
     }
 end
 
