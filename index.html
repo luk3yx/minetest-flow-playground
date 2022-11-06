@@ -28,7 +28,8 @@
                     scrollBeyondLastLine: false,
                     wordWrap: true
                 });
-                run_playground_code(code);
+                if (window.run_playground_code)
+                    run_playground_code(code);
 
                 document.body.removeChild(document.getElementById("loader"));
             });
