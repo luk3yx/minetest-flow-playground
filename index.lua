@@ -135,13 +135,17 @@ end
 
 -- Callbacks
 local on_receive_fields = {}
-local function fire_event(node_name, value)
+local function fire_event(node_name, value, exit)
     local player = minetest.get_player_by_name(PLAYER_NAME)
     local fields = {}
     for field, elem in pairs(field_elems) do
         fields[field] = elem.value
     end
     fields[node_name] = value
+
+    if exit then
+        minetest.close_formspec(PLAYER_NAME, "")
+    end
 
     for _, func in ipairs(on_receive_fields) do
         local ok, err = pcall(func, player, current_formname, fields)
@@ -163,11 +167,7 @@ function renderer.default_elem_hook(node, e, scale)
                 value = node.label or ""
             end
 
-            if node.type:sub(-5) == "_exit" then
-                minetest.close_formspec(PLAYER_NAME, "")
-            end
-
-            fire_event(node.name, value)
+            fire_event(node.name, value, node.type:sub(-5) == "_exit")
         end
     elseif node.type == "dropdown" then
         local dropdown = e:querySelector("select")
