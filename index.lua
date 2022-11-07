@@ -120,7 +120,6 @@ function minetest.show_formspec(name, formname, formspec)
             current_formname = nil
             field_elems = nil
             output.innerHTML = ""
-            output.classList:remove("fs-open")
         end
         return
     end
@@ -128,7 +127,6 @@ function minetest.show_formspec(name, formname, formspec)
     current_formname = formname
     field_elems = {}
     output.innerHTML = ""
-    output.classList:add("fs-open")
 
     local elem = assert(renderer.render_formspec(formspec, nil,
         {store_json = false}))
@@ -254,16 +252,13 @@ end
 function window:run_playground_code(code)
     local f, err = load(code, "=(playground)", "t", reset_environment())
     if not f then
-        output.classList:add("fs-open")
         output.innerHTML = ""
         chat_div.textContent = err
         return
     end
 
-    output.classList:remove("fs-open")
     local ok, res = pcall(f)
     if not ok then
-        output.classList:add("fs-open")
         output.innerHTML = ""
         chat_div.textContent = res
         return

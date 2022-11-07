@@ -83,10 +83,9 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        background-color: #8CBAFA;
     }
 
-    #loader, #output.fs-open {
+    body, #loader {
         background-color: #2B516E;
     }
 
@@ -107,13 +106,24 @@
         color: white;
     }
 
-    #run {
+    #code-container {
+        height: calc(100% - 3.5em);
+    }
+
+    #panel {
+        height: 3.5em;
+    }
+
+    #panel, #panel button {
         font-family: Arimo;
+        color: white;
+        text-shadow: 1px 1px black;
+    }
+
+    #run {
         font-size: 2em;
         padding: 0.25em;
-        color: white;
         width: 100%;
-        text-shadow: 1px 1px black;
     }
     </style>
 </head>
@@ -121,7 +131,7 @@
     <div id="loader">Loading...</div>
 
     <div id="main" class="hbox">
-        <div class="vbox" style="width: 50vw;">
+        <div class="vbox" style="width: 50vw; background-color: #252526;">
             <div id="code-container">
 -- Welcome to the flow playground!
 -- This webpage provides a limited Lua environment to create flow UIs with.
@@ -156,7 +166,7 @@ end)
 
 my_gui:show(minetest.get_player_by_name("playground"))
             </div>
-            <div class="formspec_ast-base" style="display: flex; background: #111;">
+            <div class="hbox formspec_ast-base" id="panel">
                 <button id="run" class="formspec_ast-button formspec_ast-clickable">Run</button>
             </div>
         </div>
