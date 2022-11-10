@@ -252,8 +252,10 @@ local function reset_environment()
 end
 
 function window:run_playground_code(code)
+    print("Loading playground code...")
     local f, err = load(code, "=(playground)", "t", reset_environment())
     if not f then
+        print("Syntax error", err)
         output.innerHTML = ""
         chat_div.textContent = err
         return
@@ -261,14 +263,21 @@ function window:run_playground_code(code)
 
     local ok, res = pcall(f)
     if not ok then
+        print("Runtime error", res)
         output.innerHTML = ""
         chat_div.textContent = res
         return
     end
+    print("Playground code success")
 end
+
+print("Hello from init.lua!")
 
 -- In case run_playground_code() was called before init.lua was loaded
 if window.playground_code_tmp then
+    print("window.playground_code_tmp exists")
     window:run_playground_code(window.playground_code_tmp)
     window.playground_code_tmp = nil
+else
+    print("window.playground_code_tmp does not exist")
 end
