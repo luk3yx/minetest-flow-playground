@@ -40,6 +40,7 @@ async function updateCode() {
     } else {
         editor.setValue(`${resp.status} error when fetching code`);
     }
+    editor.setScrollPosition({scrollTop: 0});
 }
 
 dropdown.addEventListener("change", updateCode);
