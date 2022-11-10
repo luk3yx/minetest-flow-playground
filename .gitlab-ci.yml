@@ -10,7 +10,8 @@ pages:
     script:
         - git submodule update --recursive --init
         - mkdir public public/flow
-        - cp *.lua *.html public
+        - cp *.lua *.html *.js public
+        - cp -r tutorials public
         - cp flow/*.lua public/flow
     artifacts:
         paths:
