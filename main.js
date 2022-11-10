@@ -20,9 +20,11 @@
 "use strict";
 
 // Overridden by init.lua once it loads
-var playground_code_tmp;
-function run_playground_code(code) {
-    playground_code_tmp = code;
+if (!window.run_playground_code) {
+    var playground_code_tmp;
+    function run_playground_code(code) {
+        playground_code_tmp = code;
+    }
 }
 
 const container = document.getElementById("code-container");
