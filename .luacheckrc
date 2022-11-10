@@ -16,3 +16,6 @@ read_globals = {
             "show_formspec", "unparse", "walk"}
     },
 }
+
+-- Ignore "shadowing upvalue player" and "shadowing upvalue ctx" warnings
+ignore = {"432/player", "43/ctx"}
