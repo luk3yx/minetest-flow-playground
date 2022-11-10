@@ -27,51 +27,45 @@ if (!window.run_playground_code) {
     }
 }
 
-const container = document.getElementById("code-container");
-const dropdownDemoCode = container.textContent.trim();
+// Handle switching between tutorials
+var editor;
+const dropdown = document.getElementById("code-preset");
+async function updateCode() {
+    editor.setValue("Loading...");
+    const resp = await fetch(`tutorials/${dropdown.value}`);
+    if (resp.ok) {
+        const code = await resp.text();
+        editor.setValue(code);
+        run_playground_code(code);
+    } else {
+        editor.setValue(`${resp.status} error when fetching code`);
+    }
+}
+
+dropdown.addEventListener("change", updateCode);
 
 // Create the editor
-var editor;
+const container = document.getElementById("code-container");
 require.config({
     paths: {vs: "https://unpkg.com/monaco-editor@0.34.1/min/vs"}
 });
 require(["vs/editor/editor.main"], () => {
     container.innerHTML = "";
     editor = monaco.editor.create(container, {
-        value: dropdownDemoCode,
+        // value: code,
         language: 'lua',
         theme: 'vs-dark',
         automaticLayout: true,
         scrollBeyondLastLine: false,
         wordWrap: true
     });
-    run_playground_code(dropdownDemoCode);
+    updateCode();
     document.body.removeChild(document.getElementById("loader"));
 });
 
 // Handle run button clicks
 document.getElementById("run").addEventListener("click", () => {
     run_playground_code(editor.getValue());
-});
-
-// Handle switching between tutorials
-const dropdown = document.getElementById("code-preset");
-dropdown.addEventListener("change", async () => {
-    let code;
-    if (dropdown.value === "demo.lua") {
-        code = dropdownDemoCode;
-    } else {
-        editor.setValue("Loading...");
-        const resp = await fetch(`tutorials/${dropdown.value}`);
-        if (!resp.ok) {
-            editor.setValue(`${resp.status} error when fetching code`);
-            return;
-        }
-        code = await resp.text();
-    }
-
-    editor.setValue(code);
-    run_playground_code(code);
 });
 
 // Add a confirmation message before closing the tab

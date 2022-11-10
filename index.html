@@ -9,6 +9,7 @@
          called. -->
     <link rel="preload" as="fetch" crossorigin="anonymous" href="init.lua" />
     <link rel="preload" as="fetch" crossorigin="anonymous" href="flow/init.lua" />
+    <link rel="preload" as="fetch" crossorigin="anonymous" href="tutorials/1-intro.lua" />
     <link rel="preload" as="fetch" crossorigin="anonymous"
           href="https://luk3yx.gitlab.io/minetest-formspec-editor/renderer.lua?rev=10" />
     <link rel="preload" as="fetch" crossorigin="anonymous"
@@ -144,7 +145,7 @@
             <div class="hbox formspec_ast-base" id="panel">
                 <h1 id="title">Flow playground</h1>
                 <select id="code-preset">
-                    <option value="1-intro.lua">Tutorial 1: Hello world!</option>
+                    <option value="1-intro.lua" selected>Tutorial 1: Hello world!</option>
                     <option value="2-boxes.lua">Tutorial 2: Boxes</option>
                     <option value="3-spacing.lua">Tutorial 3: Spacing and padding</option>
                     <option value="4-events.lua">Tutorial 4: Buttons and events</option>
@@ -153,45 +154,12 @@
                     <option value="7-expansion.lua" disabled>Tutorial 7: Expansion (TODO)</option>
                     <option value="8-scrolling.lua" disabled>Tutorial 8: Scroll containers (TODO)</option>
                     <option value="9-styling.lua" disabled>Tutorial 9: Styling forms (TODO)</option>
-                    <option value="demo.lua" selected>Dropdown demo</option>
+                    <option value="dropdown-demo.lua">Dropdown demo</option>
                     <option value="flow-example.lua">/flow-example form</option>
                 </select>
                 <button id="run" class="formspec_ast-button formspec_ast-clickable">Run</button>
             </div>
-            <div id="code-container">
--- Welcome to the flow playground!
--- To start the tutorial, click on the dropdown above this
--- code, then click "Tutoral 1: Hello world!"
-
-local gui = flow.widgets
-
-local my_gui = flow.make_gui(function(player, ctx)
-    return gui.VBox{
-        gui.HBox{
-            gui.Image{texture_name = "default_mese_crystal.png", w = 1, h = 1},
-            gui.Label{label = "Hello world!"},
-        },
-        gui.Label{label = "Here is a dropdown:"},
-        gui.Dropdown{
-            name = "my_dropdown",
-            items = {'First item', 'Second item', 'Third item'},
-            index_event = true,
-        },
-        gui.Label{label = ("Selected: %d"):format(ctx.form.my_dropdown or 1)},
-        gui.HBox{
-            gui.Button{
-                label = "Print index", w = 3,
-                on_event = function(player, ctx)
-                    print(("Selected index: %d"):format(ctx.form.my_dropdown))
-                end,
-            },
-            gui.ButtonExit{label = "Close form", w = 3},
-        }
-    }
-end)
-
-my_gui:show(minetest.get_player_by_name("playground"))
-            </div>
+            <div id="code-container"></div>
         </div>
         <div class="vbox" style="width: 50vw;">
             <div id="chat" style="position: absolute;"></div>
