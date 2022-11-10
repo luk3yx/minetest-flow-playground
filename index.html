@@ -3,6 +3,32 @@
 <head>
     <meta http-equiv="content-type" content="text/html;charset=utf-8" />
     <title>Flow playground</title>
+
+    <!-- Improve the load time by preloading .lua files. Without this, the
+         browser will have to load each .lua file one at a time as dofile() is
+         called. -->
+    <link rel="preload" as="fetch" crossorigin="anonymous" href="init.lua" />
+    <link rel="preload" as="fetch" crossorigin="anonymous" href="flow/init.lua" />
+    <link rel="preload" as="fetch" crossorigin="anonymous"
+          href="https://luk3yx.gitlab.io/minetest-formspec-editor/renderer.lua?rev=10" />
+    <link rel="preload" as="fetch" crossorigin="anonymous"
+          href="https://luk3yx.gitlab.io/minetest-formspec-editor/json.lua" />
+    <link rel="preload" as="fetch" crossorigin="anonymous"
+          href="https://luk3yx.gitlab.io/minetest-formspec-editor/formspec_ast/init.lua" />
+    <link rel="preload" as="fetch" crossorigin="anonymous"
+          href="https://luk3yx.gitlab.io/minetest-formspec-editor/formspec_ast/core.lua" />
+    <link rel="preload" as="fetch" crossorigin="anonymous"
+          href="https://luk3yx.gitlab.io/minetest-formspec-editor/formspec_ast/elements.lua" />
+    <link rel="preload" as="fetch" crossorigin="anonymous"
+          href="https://luk3yx.gitlab.io/minetest-formspec-editor/formspec_ast/helpers.lua" />
+    <link rel="preload" as="fetch" crossorigin="anonymous"
+          href="https://luk3yx.gitlab.io/minetest-formspec-editor/fs51/init.lua?rev=1" />
+    <link rel="preload" as="image"
+          href="https://gitlab.com/VanessaE/hdx-128/raw/master/default_mese_crystal.png" />
+
+    <link rel="preload" as="style"
+          href="https://fonts.googleapis.com/css?family=Arimo&amp;display=swap" />
+
     <link rel="stylesheet" type="text/css" href="https://luk3yx.gitlab.io/minetest-formspec-editor/style.css" />
 
     <!-- Fengari has to be loaded before Monaco Editor, possibly because
