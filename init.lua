@@ -180,7 +180,9 @@ function renderer.default_elem_hook(node, e, scale)
         local dropdown = e:querySelector("select")
         dropdown:addEventListener("change", function()
             if node.index_event then
-                fire_event(node.name, tostring(dropdown.selectedIndex + 1))
+                -- Use math.floor to remove the .0
+                fire_event(node.name,
+                    tostring(math.floor(dropdown.selectedIndex + 1)))
             else
                 fire_event(node.name, dropdown.value)
             end
@@ -263,4 +265,10 @@ function window:run_playground_code(code)
         chat_div.textContent = res
         return
     end
+end
+
+-- In case run_playground_code() was called before init.lua was loaded
+if window.playground_code_tmp then
+    window:run_playground_code(window.playground_code_tmp)
+    window.playground_code_tmp = nil
 end

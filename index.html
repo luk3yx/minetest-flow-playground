@@ -5,49 +5,13 @@
     <title>Flow playground</title>
     <link rel="stylesheet" type="text/css" href="https://luk3yx.gitlab.io/minetest-formspec-editor/style.css" />
 
+    <!-- Fengari has to be loaded before Monaco Editor, possibly because
+         Monaco Editor adds a require() function. -->
     <script src="https://unpkg.com/fengari-web@0.1.4/dist/fengari-web.js"></script>
-    <script type="application/lua" src="index.lua" async defer></script>
+    <script type="application/lua" src="init.lua" async defer></script>
 
     <script src="https://unpkg.com/monaco-editor@0.34.1/min/vs/loader.js" defer></script>
-    <script>
-        "use strict";
-        window.addEventListener("load", () => {
-            var editor;
-            require.config({
-                paths: {vs: "https://unpkg.com/monaco-editor@0.34.1/min/vs"}
-            });
-            require(["vs/editor/editor.main"], () => {
-                const container = document.getElementById("code-container");
-                const code = container.textContent.trim();
-                container.innerHTML = "";
-                editor = monaco.editor.create(container, {
-                    value: code,
-                    language: 'lua',
-                    theme: 'vs-dark',
-                    automaticLayout: true,
-                    scrollBeyondLastLine: false,
-                    wordWrap: true
-                });
-                if (window.run_playground_code)
-                    run_playground_code(code);
-
-                document.body.removeChild(document.getElementById("loader"));
-            });
-
-            document.getElementById("run").addEventListener("click", () => {
-                if (!window.run_playground_code) {
-                    alert("Error loading Lua script!");
-                    return;
-                }
-
-                run_playground_code(editor.getValue());
-            });
-        });
-
-        window.addEventListener("beforeunload", e => {
-            return (e || window.event).returnValue = "Warning: You will lose your code!";
-        });
-    </script>
+    <script src="main.js" defer></script>
 
     <style>
     html, body, #main {
@@ -111,7 +75,13 @@
     }
 
     #panel {
+        box-sizing: border-box;
         height: 3.5em;
+        padding: 0 0.5em;
+        gap: 1em;
+        justify-content: left;
+        align-items: center;
+        border-bottom: 1px solid black;
     }
 
     #panel, #panel button {
@@ -120,23 +90,53 @@
         text-shadow: 1px 1px black;
     }
 
+    #title {
+        flex-grow: 1;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
     #run {
-        font-size: 2em;
+        font-size: 1.5em;
+        min-width: 6em;
         padding: 0.25em;
-        width: 100%;
+        flex-align: end;
     }
     </style>
 </head>
 <body>
-    <div id="loader">Loading...</div>
+    <div id="loader">
+        <p style="font-size: 0.5em;">Please enable JavaScript</p>
+    </div>
+    <script>
+        document.getElementById("loader").textContent = "Loading...";
+    </script>
 
     <div id="main" class="hbox">
         <div class="vbox" style="width: 50vw; background-color: #252526;">
+            <div class="hbox formspec_ast-base" id="panel">
+                <h1 id="title">Flow playground</h1>
+                <select id="code-preset">
+                    <option value="1-intro.lua">Tutorial 1: Hello world!</option>
+                    <option value="2-boxes.lua">Tutorial 2: Boxes</option>
+                    <option value="3-spacing.lua">Tutorial 3: Spacing and padding</option>
+                    <option value="4-events.lua">Tutorial 4: Buttons and events</option>
+                    <option value="5-fields.lua">Tutorial 5: Fields</option>
+                    <option value="6-checkboxes.lua">Tutorial 6: Checkboxes and dropdowns</option>
+                    <option value="7-expansion.lua" disabled>Tutorial 7: Expansion (TODO)</option>
+                    <option value="8-scrolling.lua" disabled>Tutorial 8: Scroll containers (TODO)</option>
+                    <option value="9-styling.lua" disabled>Tutorial 9: Styling forms (TODO)</option>
+                    <option value="demo.lua" selected>Dropdown demo</option>
+                    <option value="flow-example.lua">/flow-example form</option>
+                </select>
+                <button id="run" class="formspec_ast-button formspec_ast-clickable">Run</button>
+            </div>
             <div id="code-container">
 -- Welcome to the flow playground!
--- This webpage provides a limited Lua environment to create flow UIs with.
--- To run the below code, click the "run" button at the bottom of the page.
--- You can interact with the UI on the right-hand side of the screen.
+-- To start the tutorial, click on the dropdown above this
+-- code, then click "Tutoral 1: Hello world!"
+
 local gui = flow.widgets
 
 local my_gui = flow.make_gui(function(player, ctx)
@@ -165,9 +165,6 @@ local my_gui = flow.make_gui(function(player, ctx)
 end)
 
 my_gui:show(minetest.get_player_by_name("playground"))
-            </div>
-            <div class="hbox formspec_ast-base" id="panel">
-                <button id="run" class="formspec_ast-button formspec_ast-clickable">Run</button>
             </div>
         </div>
         <div class="vbox" style="width: 50vw;">
