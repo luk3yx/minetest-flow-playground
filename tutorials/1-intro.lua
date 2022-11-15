@@ -3,6 +3,8 @@
 -- flow UIs with. If you edit the below code, you can click the
 -- "run" button above this code editor to see the result.
 
+-- Playground source code: https://gitlab.com/luk3yx/minetest-flow-playground/
+
 -- Flow has a number of GUI elements defined in flow.widgets,
 -- setting the gui variable to flow.widgets reduces the amount
 -- of typing required.

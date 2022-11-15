@@ -43,6 +43,8 @@ local my_gui = flow.make_gui(function(player, ctx)
         },
 
         -- You can change a field's value by modifying ctx.form
+        -- Note that flow currently doesn't have a workaround for
+        -- https://github.com/minetest/minetest/issues/10432
         gui.Button{
             label = "Clear field",
             on_event = function(player, ctx)
