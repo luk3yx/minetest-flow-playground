@@ -66,3 +66,8 @@ local my_gui = flow.make_gui(function(player, ctx)
 end)
 
 my_gui:show(minetest.get_player_by_name("playground"))
+
+-- You can provide an initial value for ctx by adding a second
+-- parameter to show(). The below code will start the counter
+-- at 10.
+-- my_gui:show(minetest.get_player_by_name("playground"), {count = 10})
