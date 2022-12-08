@@ -28,7 +28,7 @@ function dofile(f, ...)
     return dofile_raw(baseurl .. f, ...)
 end
 
-dofile('renderer.lua?rev=10')
+dofile('renderer.lua?rev=11')
 
 loadfile, dofile = loadfile_raw, dofile_raw
 
@@ -230,6 +230,7 @@ local function reset_environment()
         assert = assert,
         error = error,
         flow = flow_copy,
+        formspec_ast = table.copy(formspec_ast),
         ipairs = ipairs,
         math = table.copy(math),
         minetest = table.copy(minetest),
