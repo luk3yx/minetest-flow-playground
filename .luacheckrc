@@ -15,6 +15,7 @@ read_globals = {
             "parse", "register_element", "safe_interpret", "safe_parse",
             "show_formspec", "unparse", "walk"}
     },
+    js = {fields = {"new"}},
 }
 
 -- Ignore "shadowing upvalue player" and "shadowing upvalue ctx" warnings
