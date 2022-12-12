@@ -32,6 +32,43 @@ dofile('renderer.lua?rev=11')
 
 loadfile, dofile = loadfile_raw, dofile_raw
 
+-- Flow uses a table with weak values to track form names, however Fengari
+-- doesn't support weak tables. This implementation should prevent memory leaks
+local old_setmetatable = setmetatable
+function setmetatable(t, mt)
+    if mt.__mode == "v" and not mt.__index and not mt.__newindex and
+            not mt.__len and window.WeakRef then
+        local weak_table = {}
+        function mt:__index(key)
+            local value = weak_table[key]
+            if value ~= nil then
+                value = value:deref()
+                -- Delete the WeakRef object if the value no longer exists
+                if value == nil then
+                    weak_table[key] = nil
+                end
+            end
+            return value
+        end
+
+        function mt:__newindex(key, value)
+            weak_table[key] = js.new(window.WeakRef, value)
+        end
+
+        function mt:__len()
+            for i = #weak_table, 1, -1 do
+                if self[i] ~= nil then
+                    return i
+                end
+            end
+            return 0
+        end
+
+        mt.__mode = nil
+    end
+    return old_setmetatable(t, mt)
+end
+
 -- Create a shim for some MT APIs
 table.indexof = table.indexof or function(list, value)
     for i, item in ipairs(list) do
