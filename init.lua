@@ -235,6 +235,28 @@ function minetest.register_on_player_receive_fields(callback)
     on_receive_fields[#on_receive_fields + 1] = callback
 end
 
+local unpack = table.unpack or unpack
+local timeouts = {}
+local function cancel_timeout(id)
+    window:clearTimeout(id)
+    timeouts[id] = nil
+end
+
+function minetest.after(delay, func, ...)
+    local args = {...}
+    local id
+    id = window:setTimeout(function()
+        timeouts[id] = nil
+        local ok, err = pcall(func, unpack(args))
+        if not ok then
+            minetest.chat_send_all(tostring(err))
+        end
+    end, math.max(delay, 0.09) * 1000)
+
+    timeouts[id] = true
+    return {cancel = function() cancel_timeout(id) end}
+end
+
 -- Load flow
 function minetest.get_current_modname() return "flow" end
 function minetest.get_modpath(n) return n == "flow" and n or nil end
@@ -262,6 +284,12 @@ local function reset_environment()
     for k, v in pairs(flow) do
         flow_copy[k] = v
     end
+
+    -- Clear any existing timeouts
+    for id in pairs(timeouts) do
+        cancel_timeout(id)
+    end
+
     return {
         _VERSION = _VERSION,
         assert = assert,
@@ -284,7 +312,7 @@ local function reset_environment()
         tonumber = tonumber,
         tostring = tostring,
         type = type,
-        unpack = table.unpack or unpack,
+        unpack = unpack,
         xpcall = xpcall,
     }
 end
