@@ -5,7 +5,6 @@ local gui = flow.widgets
 
 local my_gui = flow.make_gui(function(player, ctx)
     return gui.VBox{
-        -- This is a button element
         gui.Checkbox{
             -- The name of the checkbox.
             name = "checkbox",
