@@ -35,8 +35,8 @@ shareLinkElem.addEventListener("blur", () => {
 
 function shareCode() {
     shareLinkElem.classList.add("active");
-    shareLinkElem.value = window.location.origin + window.location.pathname +
-        '?code=' + encodeURIComponent(editor.getValue());
+    window.location.hash = '#code=' + encodeURIComponent(editor.getValue());
+    shareLinkElem.value = window.location.href;
     shareLinkElem.select();
 }
 
@@ -58,13 +58,13 @@ function runCode() {
 
 const dropdown = document.getElementById("code-preset");
 var sharedCode;
-if (window.location.search.startsWith("?code=")) {
+if (window.location.hash.startsWith("#code=")) {
     const option = document.createElement("option");
     option.value = "shared";
     option.textContent = "Shared link";
     dropdown.appendChild(option);
     dropdown.value = "shared";
-    sharedCode = decodeURIComponent(window.location.search.slice(6));
+    sharedCode = decodeURIComponent(window.location.hash.slice(6));
 }
 
 // Handle switching between tutorials
