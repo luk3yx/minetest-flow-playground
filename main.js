@@ -33,7 +33,7 @@ shareLinkElem.addEventListener("blur", () => {
     shareLinkElem.classList.remove("active");
 });
 
-function makeShareLink() {
+function shareCode() {
     shareLinkElem.classList.add("active");
     shareLinkElem.value = window.location.origin + window.location.pathname +
         '?code=' + btoa(encodeURIComponent(editor.getValue()));
@@ -123,7 +123,7 @@ require(["vs/editor/editor.main"], () => {
         keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
         contextMenuGroupId: 'playground',
         contextMenuOrder: 1.5,
-        run: () => makeShareLink(),
+        run: shareCode,
     });
 
     updateCode();
