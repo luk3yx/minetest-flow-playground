@@ -36,7 +36,7 @@ shareLinkElem.addEventListener("blur", () => {
 function shareCode() {
     shareLinkElem.classList.add("active");
     shareLinkElem.value = window.location.origin + window.location.pathname +
-        '?code=' + btoa(encodeURIComponent(editor.getValue()));
+        '?code=' + encodeURIComponent(editor.getValue());
     shareLinkElem.select();
 }
 
@@ -64,7 +64,7 @@ if (window.location.search.startsWith("?code=")) {
     option.textContent = "Shared link";
     dropdown.appendChild(option);
     dropdown.value = "shared";
-    sharedCode = decodeURIComponent(atob(window.location.search.slice(6)));
+    sharedCode = decodeURIComponent(window.location.search.slice(6));
 }
 
 // Handle switching between tutorials
