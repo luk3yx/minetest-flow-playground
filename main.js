@@ -120,7 +120,6 @@ require(["vs/editor/editor.main"], () => {
     editor.addAction({
         id: 'playground-share',
         label: 'Share code',
-        keybindings: [monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyS],
         contextMenuGroupId: 'playground',
         contextMenuOrder: 1.5,
         run: shareCode,
