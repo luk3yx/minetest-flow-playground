@@ -115,6 +115,10 @@
         text-shadow: 1px 1px black;
     }
 
+    #share-link:not(.active), #share-link.active + #code-preset {
+        display: none;
+    }
+
     #title {
         flex-grow: 1;
         overflow: hidden;
@@ -140,8 +144,10 @@
 
     <div id="main" class="hbox">
         <div class="vbox" style="width: 50vw; background-color: #252526;">
-            <div class="hbox formspec_ast-base" id="panel">
+            <div id="panel" class="hbox formspec_ast-base">
                 <h1 id="title">Flow playground</h1>
+                <input type="text" id="share-link" style="user-select: all;"
+                        autocomplete="off" readonly />
                 <select id="code-preset">
                     <option value="1-intro.lua" selected>Tutorial 1: Hello world!</option>
                     <option value="2-boxes.lua">Tutorial 2: Boxes</option>
