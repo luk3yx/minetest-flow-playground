@@ -21,6 +21,8 @@ local my_gui = flow.make_gui(function(player, ctx)
             label = "Field label",
 
             -- The default value of the field (optional)
+            -- If ctx.form.<field name> is present, it will
+            -- override this value.
             default = "Field value",
 
             -- You can also add on_event to fields, however
