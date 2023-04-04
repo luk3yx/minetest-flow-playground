@@ -9,9 +9,6 @@
 local gui = flow.widgets
 
 local my_gui = flow.make_gui(function(player, ctx)
-    -- This creates a horizontal box with three elements.
-    -- The three elements will be positioned to the right
-    -- of each other.
     return gui.VBox{
         min_w = 10,
         gui.Label{label = "Expansion/alignment demo:"},
