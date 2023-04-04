@@ -37,9 +37,9 @@ local my_gui = flow.make_gui(function(player, ctx)
             gui.Box{w = 0.5, h = 0.5, color = "white", expand = true},
         },
 
-        -- To control what an expanded node does with the extra
-        -- space, you can set align_h (horizontal) or align_v
-        -- (vertical) to one of the below:
+        -- To control what an expanded element does with the
+        -- extra space, you can set align_h (horizontal) or
+        -- align_v (vertical) to one of the below:
         -- "auto" (default): Automatically chooses one of the
         -- below options based on the type of the element.
         -- "fill": Increases the size of the element to fill
