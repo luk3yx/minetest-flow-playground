@@ -257,6 +257,23 @@ function minetest.after(delay, func, ...)
     return {cancel = function() cancel_timeout(id) end}
 end
 
+function minetest.get_translator(modname)
+    return function(str, ...)
+        local args = {...}
+        return (str:gsub("@(.)", function(c)
+            local n = tonumber(c)
+            if args[n] then
+                return args[n]
+            elseif c == "\n" or c == "n" then
+                return "\n"
+            elseif c == "@" or c == "=" then
+                return c
+            end
+            error("Unrecognised translation escape: @" .. c, 4)
+        end))
+    end
+end
+
 -- Load flow
 function minetest.get_current_modname() return "flow" end
 function minetest.get_modpath(n) return n == "flow" and n or nil end
