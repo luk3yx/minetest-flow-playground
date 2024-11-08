@@ -14,7 +14,7 @@ local my_gui = flow.make_gui(function(player, ctx)
         -- you will see the fallback that gets sent to older
         -- clients. If you want to see this work with a
         -- scrollbar, try running this code in-game with
-        -- https://content.minetest.net/packages/luk3yx/snippets
+        -- https://content.luanti.org/packages/luk3yx/snippets
         gui.ScrollableVBox{
             -- A name must be provided for ScrollableVBox
             -- elements. You don't have to use this name
@@ -44,4 +44,4 @@ local my_gui = flow.make_gui(function(player, ctx)
     }
 end)
 
-my_gui:show(minetest.get_player_by_name("playground"))
+my_gui:show(core.get_player_by_name("playground"))

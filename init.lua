@@ -91,12 +91,15 @@ string.split = string.split or function(str, chr)
 end
 
 
-minetest = {}
+core = {}
+
+-- Compatibility
+minetest = core
 
 local PLAYER_NAME = "playground"
 local current_formname
 
-function minetest.get_player_by_name(name)
+function core.get_player_by_name(name)
     if name ~= PLAYER_NAME then return end
 
     return {
@@ -106,22 +109,22 @@ function minetest.get_player_by_name(name)
     }
 end
 
-function minetest.get_connected_players()
-    return {minetest.get_player_by_name(PLAYER_NAME)}
+function core.get_connected_players()
+    return {core.get_player_by_name(PLAYER_NAME)}
 end
 
 -- TODO
-function minetest.get_color_escape_sequence()
+function core.get_color_escape_sequence()
     return ""
 end
 
-function minetest.colorize(_, text)
+function core.colorize(_, text)
     return text
 end
 
 local chat
 local chat_div = document:getElementById("chat")
-function minetest.chat_send_all(msg)
+function core.chat_send_all(msg)
     chat[#chat + 1] = msg
     if #chat > 10 then
         table.remove(chat, 1)
@@ -130,26 +133,26 @@ function minetest.chat_send_all(msg)
     chat_div.textContent = table.concat(chat, "\n")
 end
 
-function minetest.chat_send_player(name, msg)
+function core.chat_send_player(name, msg)
     if name == PLAYER_NAME then
-        minetest.chat_send_all(msg)
+        core.chat_send_all(msg)
     end
 end
 
-function minetest.is_yes(value)
+function core.is_yes(value)
     return value:lower() == "true"
 end
 
 local function noop() end
-minetest.get_player_information = noop
-minetest.register_on_leaveplayer = noop
-minetest.is_singleplayer = noop
-minetest.get_us_time = noop
+core.get_player_information = noop
+core.register_on_leaveplayer = noop
+core.is_singleplayer = noop
+core.get_us_time = noop
 
 local field_elems
 local output = document:getElementById("output")
 -- local fs_elem = document:getElementById("formspec")
-function minetest.show_formspec(name, formname, formspec)
+function core.show_formspec(name, formname, formspec)
     assert(name == PLAYER_NAME)
 
     if formspec == "" then
@@ -173,14 +176,14 @@ function minetest.show_formspec(name, formname, formspec)
     -- fs_elem.textContent = formspec
 end
 
-function minetest.close_formspec(name, formname)
-    minetest.show_formspec(name, formname, "")
+function core.close_formspec(name, formname)
+    core.show_formspec(name, formname, "")
 end
 
 -- Callbacks
 local on_receive_fields = {}
 local function fire_event(node_name, value, exit)
-    local player = minetest.get_player_by_name(PLAYER_NAME)
+    local player = core.get_player_by_name(PLAYER_NAME)
     local fields = {}
     for field, elem in pairs(field_elems) do
         fields[field] = elem.value
@@ -188,13 +191,13 @@ local function fire_event(node_name, value, exit)
     fields[node_name] = value
 
     if exit then
-        minetest.close_formspec(PLAYER_NAME, "")
+        core.close_formspec(PLAYER_NAME, "")
     end
 
     for _, func in ipairs(on_receive_fields) do
         local ok, err = pcall(func, player, current_formname, fields)
         if not ok then
-            minetest.chat_send_all(err)
+            core.chat_send_all(err)
         end
     end
 end
@@ -231,7 +234,7 @@ function renderer.default_elem_hook(node, e, scale)
     end
 end
 
-function minetest.register_on_player_receive_fields(callback)
+function core.register_on_player_receive_fields(callback)
     on_receive_fields[#on_receive_fields + 1] = callback
 end
 
@@ -242,14 +245,14 @@ local function cancel_timeout(id)
     timeouts[id] = nil
 end
 
-function minetest.after(delay, func, ...)
+function core.after(delay, func, ...)
     local args = {...}
     local id
     id = window:setTimeout(function()
         timeouts[id] = nil
         local ok, err = pcall(func, unpack(args))
         if not ok then
-            minetest.chat_send_all(tostring(err))
+            core.chat_send_all(tostring(err))
         end
     end, math.max(delay, 0.09) * 1000)
 
@@ -257,7 +260,7 @@ function minetest.after(delay, func, ...)
     return {cancel = function() cancel_timeout(id) end}
 end
 
-function minetest.get_translator(modname)
+function core.get_translator(modname)
     return function(str, ...)
         local args = {...}
         return (str:gsub("@(.)", function(c)
@@ -275,10 +278,10 @@ function minetest.get_translator(modname)
 end
 
 -- Load flow
-function minetest.get_current_modname() return "flow" end
-function minetest.get_modpath(n) return n == "flow" and n or nil end
+function core.get_current_modname() return "flow" end
+function core.get_modpath(n) return n == "flow" and n or nil end
 dofile("flow/init.lua")
-minetest.get_current_modname = noop
+core.get_current_modname = noop
 
 local on_receive_fields_bkp = table.copy(on_receive_fields)
 
@@ -287,7 +290,7 @@ local function print_to_chat(...)
     for i = 1, select("#", ...) do
         t[i] = tostring(select(i, ...))
     end
-    minetest.chat_send_all(table.concat(t, "\t"))
+    core.chat_send_all(table.concat(t, "\t"))
 end
 
 -- Makes a new Lua environment
@@ -295,7 +298,7 @@ local function reset_environment()
     chat = {}
     chat_div.textContent = ""
 
-    minetest.close_formspec(PLAYER_NAME, "")
+    core.close_formspec(PLAYER_NAME, "")
     on_receive_fields = table.copy(on_receive_fields_bkp)
     local flow_copy = {}
     for k, v in pairs(flow) do
@@ -321,7 +324,7 @@ local function reset_environment()
             time = os.time},
         pairs = pairs,
         pcall = pcall,
-        player = minetest.get_player_by_name(PLAYER_NAME),
+        player = core.get_player_by_name(PLAYER_NAME),
         print = print_to_chat,
         select = select,
         string = table.copy(string),

@@ -25,7 +25,7 @@ local my_gui = flow.make_gui(function(player, ctx)
             -- arguments which should be used instead of the
             -- player and ctx arguments above.
             on_event = function(player, ctx)
-                minetest.chat_send_player(player:get_player_name(),
+                core.chat_send_player(player:get_player_name(),
                     "Button pressed!")
 
                 -- Increase the saved count
@@ -65,9 +65,9 @@ local my_gui = flow.make_gui(function(player, ctx)
     }
 end)
 
-my_gui:show(minetest.get_player_by_name("playground"))
+my_gui:show(core.get_player_by_name("playground"))
 
 -- You can provide an initial value for ctx by adding a second
 -- parameter to show(). The below code will start the counter
 -- at 10.
--- my_gui:show(minetest.get_player_by_name("playground"), {count = 10})
+-- my_gui:show(core.get_player_by_name("playground"), {count = 10})

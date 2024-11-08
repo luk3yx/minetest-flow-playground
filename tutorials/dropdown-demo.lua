@@ -25,4 +25,4 @@ local my_gui = flow.make_gui(function(player, ctx)
     }
 end)
 
-my_gui:show(minetest.get_player_by_name("playground"))
+my_gui:show(core.get_player_by_name("playground"))

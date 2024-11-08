@@ -79,7 +79,7 @@ local my_gui = flow.make_gui(function(player, ctx)
                 ctx.form.checkbox = not ctx.form.checkbox
 
                 -- Send a chat message
-                minetest.chat_send_player(player:get_player_name(), "Toggled!")
+                core.chat_send_player(player:get_player_name(), "Toggled!")
 
                 -- Return true to tell flow to redraw the formspec
                 return true
@@ -207,4 +207,4 @@ local my_gui = flow.make_gui(function(player, ctx)
     }
 end)
 
-my_gui:show(minetest.get_player_by_name("playground"))
+my_gui:show(core.get_player_by_name("playground"))

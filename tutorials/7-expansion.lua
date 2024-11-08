@@ -114,11 +114,11 @@ end)
 -- expansion, you can select "/flow-example form" in the
 -- dropdown at the top of the page.
 
-my_gui:show(minetest.get_player_by_name("playground"))
+my_gui:show(core.get_player_by_name("playground"))
 
 -- Tutorial 4 briefly mentioned the ability to set an
 -- initial value for ctx. It's also possible to provide
 -- data for ctx.form in that value:
--- my_gui:show(minetest.get_player_by_name("playground"), {
+-- my_gui:show(core.get_player_by_name("playground"), {
 --     form = {field1 = "Value 1", field2 = "Value 2"}
 -- })

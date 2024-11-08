@@ -19,7 +19,7 @@ local my_gui = flow.make_gui(function(player, ctx)
 end)
 
 -- This shows the GUI to a player called "playground".
-my_gui:show(minetest.get_player_by_name("playground"))
+my_gui:show(core.get_player_by_name("playground"))
 
 -- To see the next tutorial, click on the dropdown above
 -- this code and select "Tutorial 2: Boxes".
