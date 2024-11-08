@@ -99,6 +99,10 @@ minetest = core -- luacheck: ignore
 local PLAYER_NAME = "playground"
 local current_formname
 
+function core.global_exists(var)
+    return rawget(_G, var) ~= nil
+end
+
 function core.get_player_by_name(name)
     if name ~= PLAYER_NAME then return end
 
