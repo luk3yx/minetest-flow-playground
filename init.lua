@@ -310,15 +310,17 @@ local function reset_environment()
         cancel_timeout(id)
     end
 
+    local core_copy = table.copy(core)
     return {
         _VERSION = _VERSION,
         assert = assert,
+        core = core_copy,
         error = error,
         flow = flow_copy,
         formspec_ast = table.copy(formspec_ast),
         ipairs = ipairs,
         math = table.copy(math),
-        minetest = table.copy(minetest),
+        minetest = core_copy,
         next = next,
         os = {clock = os.clock, date = os.date, difftime = os.difftime,
             time = os.time},
