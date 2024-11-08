@@ -94,7 +94,7 @@ end
 core = {}
 
 -- Compatibility
-minetest = core
+minetest = core -- luacheck: no unused
 
 local PLAYER_NAME = "playground"
 local current_formname
