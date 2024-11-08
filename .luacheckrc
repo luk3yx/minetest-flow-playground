@@ -2,7 +2,7 @@ unused_args = false
 allow_defined_top = true
 
 globals = {
-    "renderer", "window",
+    "core", "minetest", "renderer", "window",
     string = {fields = {"split"}},
     table = {fields = {"copy", "indexof"}},
 }
