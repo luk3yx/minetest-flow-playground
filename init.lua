@@ -310,17 +310,15 @@ local function reset_environment()
         cancel_timeout(id)
     end
 
-    local core_copy = table.copy(core)
-    return {
+    local env = {
         _VERSION = _VERSION,
         assert = assert,
-        core = core_copy,
+        core = table.copy(core),
         error = error,
         flow = flow_copy,
         formspec_ast = table.copy(formspec_ast),
         ipairs = ipairs,
         math = table.copy(math),
-        minetest = core_copy,
         next = next,
         os = {clock = os.clock, date = os.date, difftime = os.difftime,
             time = os.time},
@@ -337,6 +335,13 @@ local function reset_environment()
         unpack = unpack,
         xpcall = xpcall,
     }
+
+    env.minetest = env.core
+    function env.core.global_exists(var)
+        return rawget(env, var) ~= nil
+    end
+
+    return env
 end
 
 function window:run_playground_code(code)
