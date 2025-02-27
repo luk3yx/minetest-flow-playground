@@ -71,10 +71,12 @@ if (window.location.hash.startsWith("#code=")) {
 async function updateCode() {
     editor.setScrollPosition({scrollTop: 0});
     if (dropdown.value === "shared") {
-        // Load in code from the URL and add a warning
-        untrustedCode = true;
+        // Load in code from the URL and add a warning if not loaded from a
+        // trusted source
+        if (!window.opener || window.opener.location.host !== location.host)
+            untrustedCode = true;
         editor.setValue(sharedCode);
-        run_playground_code("");
+        run_playground_code(untrustedCode ? "" : sharedCode);
         return;
     }
 
