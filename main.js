@@ -73,8 +73,12 @@ async function updateCode() {
     if (dropdown.value === "shared") {
         // Load in code from the URL and add a warning if not loaded from a
         // trusted source
-        if (!window.opener || window.opener.location.host !== location.host)
+        try {
+            if (!window.opener || window.opener.location.host !== location.host)
+                untrustedCode = true;
+        } catch(e) {
             untrustedCode = true;
+        }
         editor.setValue(sharedCode);
         run_playground_code(untrustedCode ? "" : sharedCode);
         return;
